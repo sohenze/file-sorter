@@ -1,16 +1,16 @@
 # File Sorter by Modified Year
 
-A simple Python script to walk through all files in a target directory and move them into an output directory, organized into subfolders by the files' modified year.
+A simple Python script to walk through all files in a target directory and copy them into an output directory, organized into subfolders by the files' modified year.
 
 ---
 
 ## Features
 
 - Recursively scans all files in the target directory.
-- Moves files into year-based subfolders inside the specified output directory.
+- Copies files into year-based subfolders inside the specified output directory.
 - Automatically creates year subfolders if they don’t exist.
 - Skips processing the output directory itself to avoid infinite loops.
-- Displays the total number of files moved.
+- Displays the total number of files copied.
 
 ---
 
