@@ -3,6 +3,7 @@ import datetime
 import os
 import shutil
 
+
 def main():
     parser = argparse.ArgumentParser(description="Sort files by modified year.")
     parser.add_argument("target_dir", help="Path to the target directory")
@@ -13,25 +14,27 @@ def main():
     output_dir = args.output_dir
     output_dir_name = os.path.basename(output_dir)
 
-    counter = 0
+    # Collect all files to copy
+    files_to_copy: list[str] = []
     for dirpath, dirnames, filenames in os.walk(target_dir):
         if output_dir_name in dirnames:
             dirnames.remove(output_dir_name)
-
         for filename in filenames:
-            source_file = dirpath + "/" + filename
-            
-            stats = os.stat(source_file)
-            modified_time = datetime.datetime.fromtimestamp(stats.st_mtime)
-            modified_year = modified_time.year
+            source_file = os.path.join(dirpath, filename)
+            files_to_copy.append(source_file)
 
-            dest_folder = f"{output_dir}/{modified_year}"
-            os.makedirs(dest_folder, exist_ok=True)
-            shutil.move(source_file, dest_folder)
-            counter += 1
-            print(f"Moved {source_file} to {dest_folder}.")
+    # Copy all files
+    for counter, source_file in enumerate(files_to_copy, start=1):
+        stats = os.stat(source_file)
+        modified_time = datetime.datetime.fromtimestamp(stats.st_mtime)
+        modified_year = modified_time.year
 
-    print(f"Moved {counter} files.")
+        dest_folder = os.path.join(output_dir, str(modified_year))
+        os.makedirs(dest_folder, exist_ok=True)
+        shutil.copy2(source_file, dest_folder)
+        print(f"Copied {counter}/{len(files_to_copy)} files: {source_file}")
+
+    print(f"Finished copying {len(files_to_copy)} files.")
 
 
 if __name__ == "__main__":
